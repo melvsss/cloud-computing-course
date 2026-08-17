@@ -10,6 +10,6 @@ The Linux server was investigated using the KillerCoda Linux Playground. Linux c
 
 ```bash
 cat /etc/os-release
-
-'''bash
 lscpu
+free -h
+df -h
