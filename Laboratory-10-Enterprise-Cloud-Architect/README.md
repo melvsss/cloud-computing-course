@@ -46,7 +46,7 @@ The infrastructure follows a multi-tier architecture consisting of the following
 
 The diagram illustrates the relationship between the host machine, hypervisor, virtual machine, firewall, Docker containers, application, and database.
 
-![Cloud Infrastructure Architecture](Diagrams/cloud-architecture.png)
+![Cloud Infrastructure Architecture](Diagrams/Architecture.png)
 
 ## 4. Technologies Used
 
