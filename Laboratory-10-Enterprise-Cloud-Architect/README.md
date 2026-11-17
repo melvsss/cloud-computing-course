@@ -149,15 +149,16 @@ Database credentials are stored in the server's environment configuration. Sensi
 
 ## 8. Persistent Storage
 
-Docker volumes provide persistent storage for application and database information.
+Docker named volumes provide persistent storage for WordPress application files and MariaDB database files.
 
-The database volume identified in the deployment is:
+The project uses the following Docker volumes:
 
-```text
-ccm101-cloud_db_data
-```
+| Service | Volume Name | Container Mount Path |
+|---|---|---|
+| WordPress | `ccm101-cloud_wordpress_data` | `/var/www/html` |
+| MariaDB | `ccm101-cloud_db_data` | `/var/lib/mysql` |
 
-Docker volumes help preserve stored data when containers are restarted or recreated.
+These volumes are managed by Docker Compose and are designed to preserve application and database data when containers are restarted or recreated.
 
 ### Verify Docker Volumes
 
@@ -165,13 +166,17 @@ Docker volumes help preserve stored data when containers are restarted or recrea
 sudo docker volume ls
 ```
 
-### Inspect the Database Volume
+### Inspect Persistent Volumes
 
 ```bash
-sudo docker volume inspect ccm101-cloud_db_data
+sudo docker volume inspect ccm101-cloud_wordpress_data ccm101-cloud_db_data
 ```
 
-The WordPress volume and its mount configuration should be verified using the actual Docker Compose configuration.
+### Volume Configuration
+
+The WordPress volume stores application files, while the MariaDB volume stores database files.
+
+Both volumes were verified using Docker volume inspection.
 
 ## 9. Security Implementation
 
@@ -248,7 +253,13 @@ To check all compressed SQL backup files, run:
 
 ```bash
 for file in /opt/ccm101-cloud/backups/*.sql.gz; do
-    sudo gzip -t "$file" && echo "VALID: $file" || echo "INVALID: $file"
+    if sudo test -f "$file"; then
+        if sudo gzip -t "$file"; then
+            echo "VALID: $file"
+        else
+            echo "INVALID: $file"
+        fi
+    fi
 done
 ```
 
